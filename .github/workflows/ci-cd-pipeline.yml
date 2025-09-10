@@ -1,11 +1,7 @@
-name: CI/CD Pipeline
+name: Mock CI/CD Pipeline
 
-# Ejecuta el workflow cuando haya push o pull request a main
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
@@ -16,16 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
+      - name: Mock Build
+        run: |
+          echo " Building the project (mock)..."
+          sleep 2
+          echo "Build completed "
 
   test:
     runs-on: ubuntu-latest
@@ -34,16 +25,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+      - name: Mock Test
+        run: |
+          echo " Running tests (mock)..."
+          sleep 2
+          echo "All tests passed "
 
   deploy-staging:
     runs-on: ubuntu-latest
@@ -52,9 +38,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to staging
+      - name: Mock Deploy
         run: |
-          echo "Deploying to staging..."
-          # Aquí va tu script real de deploy
-          # Ejemplo: scp -r ./dist user@staging:/var/www/app
-          # ssh user@staging "systemctl restart app"
+          echo " Deploying to staging environment (mock)..."
+          sleep 2
+          echo "Deployment completed "
