@@ -3,6 +3,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import {
+  Alert,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -22,6 +24,8 @@ export default function LoginScreen({ navigation }: Props) {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    Keyboard.dismiss(); // cerrar teclado antes de alert
+
     if (!email || !password) {
       return Toast.show({
         type: 'error',
@@ -39,7 +43,16 @@ export default function LoginScreen({ navigation }: Props) {
         text2: 'Inicio de sesión exitoso 🎉',
       });
 
-      setTimeout(() => navigation.replace('Home'), 1500);
+      // Mostrar alert antes de navegar
+      setTimeout(() => {
+        Alert.alert(
+          'Inicio de sesión',
+          `Bienvenido ${email}`,
+          [
+            { text: 'Continuar', onPress: () => navigation.replace('Home') }
+          ]
+        );
+      }, 200); // delay mínimo para asegurar que Toast termine
     } catch (error: any) {
       Toast.show({
         type: 'error',
@@ -50,14 +63,13 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <LinearGradient colors={['#4facfe', '#43e97b']} style={styles.background}>
+    <LinearGradient colors={['#667eea', '#764ba2']} style={styles.background}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
       >
         <Animatable.View animation="fadeInUp" duration={800} style={styles.card}>
-          <Text style={styles.title}>Inicio de Sesión</Text>
-          <Text style={styles.subtitle}>Tu salud, a un toque de distancia</Text>
+          <Text style={styles.title}>Iniciar Sesión</Text>
 
           <TextInput
             placeholder="Correo electrónico"
@@ -66,7 +78,7 @@ export default function LoginScreen({ navigation }: Props) {
             style={styles.input}
             autoCapitalize="none"
             keyboardType="email-address"
-            placeholderTextColor="#777"
+            placeholderTextColor="#aaa"
           />
 
           <TextInput
@@ -75,7 +87,7 @@ export default function LoginScreen({ navigation }: Props) {
             onChangeText={setPassword}
             secureTextEntry
             style={styles.input}
-            placeholderTextColor="#777"
+            placeholderTextColor="#aaa"
           />
 
           <Animatable.View animation="pulse" iterationCount="infinite" iterationDelay={2500}>
@@ -98,45 +110,39 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   card: {
     width: '85%',
-    backgroundColor: 'rgba(255,255,255,0.95)',
+    backgroundColor: 'rgba(255,255,255,0.9)',
     padding: 30,
-    borderRadius: 18,
+    borderRadius: 16,
     shadowColor: '#000',
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
-    elevation: 6,
+    elevation: 8,
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '800',
-    marginBottom: 5,
-    textAlign: 'center',
-    color: '#1e3a8a',
-  },
-  subtitle: {
-    fontSize: 14,
-    textAlign: 'center',
     marginBottom: 25,
-    color: '#475569',
+    textAlign: 'center',
+    color: '#3b3b98',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: '#ccc',
     padding: 14,
     marginBottom: 15,
-    borderRadius: 12,
+    borderRadius: 10,
     backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#3b3b98',
     padding: 15,
-    borderRadius: 12,
+    borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: { color: 'white', fontWeight: 'bold', fontSize: 17 },
   link: {
-    color: '#2563eb',
+    color: '#3b3b98',
     marginTop: 18,
     textAlign: 'center',
     fontWeight: '600',
