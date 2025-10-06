@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import {
   Alert,
@@ -17,14 +17,14 @@ import Toast from 'react-native-toast-message';
 import { auth } from '../config/firebaseConfig';
 import { RootStackParamList } from '../navigation/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Register'>;
 
-export default function LoginScreen({ navigation }: Props) {
+export default function RegisterScreen({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    Keyboard.dismiss(); // cerrar teclado antes de alert
+  const handleRegister = async () => {
+    Keyboard.dismiss(); // cerrar teclado
 
     if (!email || !password) {
       return Toast.show({
@@ -35,29 +35,33 @@ export default function LoginScreen({ navigation }: Props) {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
 
+      // Mostrar Toast
       Toast.show({
         type: 'success',
-        text1: '¡Bienvenido!',
-        text2: 'Inicio de sesión exitoso 🎉',
+        text1: '¡Cuenta creada!',
+        text2: 'Registro exitoso 🎉',
       });
 
-      // Mostrar alert antes de navegar
+      // Mostrar Alert después de un pequeño delay para evitar conflictos con Toast y animación
       setTimeout(() => {
         Alert.alert(
-          'Inicio de sesión',
-          `Bienvenido ${email}`,
+          'Registro exitoso',
+          `Bienvenido ${email}, tu cuenta ha sido creada correctamente`,
           [
-            { text: 'Continuar', onPress: () => navigation.replace('Home') }
+            {
+              text: 'Continuar',
+              onPress: () => navigation.replace('Login'),
+            },
           ]
         );
-      }, 200); // delay mínimo para asegurar que Toast termine
+      }, 400);
     } catch (error: any) {
       Toast.show({
         type: 'error',
-        text1: 'Error al iniciar sesión',
-        text2: 'Correo o contraseña incorrectos ❌',
+        text1: 'Error al registrar',
+        text2: error.message || 'No se pudo crear la cuenta ❌',
       });
     }
   };
@@ -69,7 +73,7 @@ export default function LoginScreen({ navigation }: Props) {
         style={styles.container}
       >
         <Animatable.View animation="fadeInUp" duration={800} style={styles.card}>
-          <Text style={styles.title}>Iniciar Sesión</Text>
+          <Text style={styles.title}>Registrarse</Text>
 
           <TextInput
             placeholder="Correo electrónico"
@@ -90,14 +94,13 @@ export default function LoginScreen({ navigation }: Props) {
             placeholderTextColor="#aaa"
           />
 
-          <Animatable.View animation="pulse" iterationCount="infinite" iterationDelay={2500}>
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-              <Text style={styles.buttonText}>Entrar</Text>
-            </TouchableOpacity>
-          </Animatable.View>
+          {/* Botón fuera de animación infinita */}
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Text style={styles.buttonText}>Crear cuenta</Text>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.link}>¿No tienes cuenta? Regístrate</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.link}>¿Ya tienes cuenta? Inicia sesión</Text>
           </TouchableOpacity>
         </Animatable.View>
       </KeyboardAvoidingView>
@@ -139,6 +142,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginBottom: 15,
   },
   buttonText: { color: 'white', fontWeight: 'bold', fontSize: 17 },
   link: {
