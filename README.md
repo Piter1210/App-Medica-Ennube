@@ -41,3 +41,4 @@ Usamos **GitFlow** para organizar nuestras ramas y versiones:
 4. Crear release/* desde develop para preparar producción.
 5. Merge de release/* a main y creación de **tag** de versión.
 6. Si hay errores críticos en main, crear hotfix/*, merge a main y develop, y crear **tag** de hotfix.
+7.
