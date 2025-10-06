@@ -27,7 +27,7 @@ export default function RegisterScreen({ navigation }: Props) {
       return Toast.show({
         type: 'error',
         text1: 'Campos incompletos',
-        text2: 'Por favor llena todos los campos ✍️',
+        text2: 'Por favor completa todos los campos ✍️',
       });
     }
 
@@ -65,10 +65,11 @@ export default function RegisterScreen({ navigation }: Props) {
   };
 
   return (
-    <LinearGradient colors={['#ff9966', '#ff5e62']} style={styles.background}>
+    <LinearGradient colors={['#4facfe', '#43e97b']} style={styles.background}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.container}>
         <Animatable.View animation="fadeInUp" duration={800} style={styles.card}>
-          <Text style={styles.title}>Crea tu cuenta</Text>
+          <Text style={styles.title}>Crear Cuenta</Text>
+          <Text style={styles.subtitle}>Únete a tu portal de salud digital</Text>
 
           <TextInput
             placeholder="Correo electrónico"
@@ -77,7 +78,7 @@ export default function RegisterScreen({ navigation }: Props) {
             style={styles.input}
             autoCapitalize="none"
             keyboardType="email-address"
-            placeholderTextColor="#aaa"
+            placeholderTextColor="#777"
           />
 
           <TextInput
@@ -86,7 +87,7 @@ export default function RegisterScreen({ navigation }: Props) {
             onChangeText={setPassword}
             secureTextEntry
             style={styles.input}
-            placeholderTextColor="#aaa"
+            placeholderTextColor="#777"
           />
 
           <Animatable.View animation="pulse" iterationCount="infinite" iterationDelay={2500}>
@@ -109,36 +110,42 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   card: {
     width: '85%',
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     padding: 30,
-    borderRadius: 16,
+    borderRadius: 18,
     shadowColor: '#000',
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
-    elevation: 8,
+    elevation: 6,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800',
-    marginBottom: 25,
+    marginBottom: 5,
     textAlign: 'center',
-    color: '#ff5e62',
+    color: '#1e3a8a',
+  },
+  subtitle: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 25,
+    color: '#475569',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#d1d5db',
     padding: 14,
     marginBottom: 15,
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#ff5e62',
+    backgroundColor: '#2563eb',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
   },
   buttonText: { color: 'white', fontWeight: 'bold', fontSize: 17 },
-  link: { color: '#ff5e62', marginTop: 18, textAlign: 'center', fontWeight: '600' },
+  link: { color: '#2563eb', marginTop: 18, textAlign: 'center', fontWeight: '600' },
 });
