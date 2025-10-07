@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { KEYS } from './keys';
 
@@ -14,5 +14,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app); 
+export const db = getFirestore(app);
+
+// ✅ Verificar conexión y autenticación
+onAuthStateChanged(auth, (user) => {
+  console.log(user ? '🔐 Usuario autenticado:' : '❌ No hay usuario conectado', user?.email);
+});
+
 export default app;

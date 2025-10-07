@@ -1,31 +1,40 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Alert,
-  Keyboard,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Toast from 'react-native-toast-message';
 import { auth } from '../config/firebaseConfig';
-import { RootStackParamList } from '../navigation/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
-
-export default function LoginScreen({ navigation }: Props) {
+export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigatedRef = useRef(false);
+  const router = useRouter();
+
+  // Redirige automáticamente si ya está autenticado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && !navigatedRef.current) {
+        navigatedRef.current = true;
+        router.replace('/screens/HomeScreen');
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const handleLogin = async () => {
-    Keyboard.dismiss(); // cerrar teclado antes de alert
-
+    if (loading) return;
     if (!email || !password) {
       return Toast.show({
         type: 'error',
@@ -34,31 +43,28 @@ export default function LoginScreen({ navigation }: Props) {
       });
     }
 
+    setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-
+      await signInWithEmailAndPassword(auth, email.trim(), password);
       Toast.show({
         type: 'success',
-        text1: '¡Bienvenido!',
-        text2: 'Inicio de sesión exitoso 🎉',
+        text1: 'Bienvenido 🎉',
+        text2: `Has iniciado sesión como ${email}`,
       });
 
-      // Mostrar alert antes de navegar
-      setTimeout(() => {
-        Alert.alert(
-          'Inicio de sesión',
-          `Bienvenido ${email}`,
-          [
-            { text: 'Continuar', onPress: () => navigation.replace('Home') }
-          ]
-        );
-      }, 200); // delay mínimo para asegurar que Toast termine
+      if (!navigatedRef.current) {
+        navigatedRef.current = true;
+        router.replace('/screens/HomeScreen');
+      }
     } catch (error: any) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error al iniciar sesión',
-        text2: 'Correo o contraseña incorrectos ❌',
-      });
+      console.error('🔥 Error en login:', error);
+      let msg = 'No se pudo iniciar sesión ❌';
+      if (error.code === 'auth/invalid-email') msg = 'Correo inválido.';
+      if (error.code === 'auth/user-not-found') msg = 'Usuario no encontrado.';
+      if (error.code === 'auth/wrong-password') msg = 'Contraseña incorrecta.';
+      Toast.show({ type: 'error', text1: 'Error al iniciar sesión', text2: msg });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,17 +96,22 @@ export default function LoginScreen({ navigation }: Props) {
             placeholderTextColor="#aaa"
           />
 
-          <Animatable.View animation="pulse" iterationCount="infinite" iterationDelay={2500}>
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-              <Text style={styles.buttonText}>Entrar</Text>
-            </TouchableOpacity>
-          </Animatable.View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            <LinearGradient colors={['#5f72bd', '#9b23ea']} style={styles.gradientBtn}>
+              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Entrar</Text>}
+            </LinearGradient>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <TouchableOpacity onPress={() => router.push('/screens/RegisterScreen')}>
             <Text style={styles.link}>¿No tienes cuenta? Regístrate</Text>
           </TouchableOpacity>
         </Animatable.View>
       </KeyboardAvoidingView>
+      <Toast />
     </LinearGradient>
   );
 }
@@ -110,7 +121,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   card: {
     width: '85%',
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'rgba(255,255,255,0.95)',
     padding: 30,
     borderRadius: 16,
     shadowColor: '#000',
@@ -119,32 +130,17 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 8,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 25,
-    textAlign: 'center',
-    color: '#3b3b98',
-  },
+  title: { fontSize: 28, fontWeight: '800', marginBottom: 25, textAlign: 'center', color: '#3b3b98' },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     padding: 14,
     marginBottom: 15,
     borderRadius: 10,
     backgroundColor: 'white',
   },
-  button: {
-    backgroundColor: '#3b3b98',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
+  button: { borderRadius: 10, overflow: 'hidden', marginTop: 10 },
+  gradientBtn: { padding: 15, alignItems: 'center' },
   buttonText: { color: 'white', fontWeight: 'bold', fontSize: 17 },
-  link: {
-    color: '#3b3b98',
-    marginTop: 18,
-    textAlign: 'center',
-    fontWeight: '600',
-  },
+  link: { color: '#3b3b98', marginTop: 18, textAlign: 'center', fontWeight: '600' },
 });
