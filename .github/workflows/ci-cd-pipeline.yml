@@ -1,0 +1,45 @@
+name: Mock CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Mock Build
+        run: |
+          echo " Building the project (mock)..."
+          sleep 2
+          echo "Build completed "
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Mock Test
+        run: |
+          echo " Running tests (mock)..."
+          sleep 2
+          echo "All tests passed "
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Mock Deploy
+        run: |
+          echo " Deploying to staging environment (mock)..."
+          sleep 2
+          echo "Deployment completed "
