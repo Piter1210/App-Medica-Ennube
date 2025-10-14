@@ -3,6 +3,7 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
+<<<<<<< HEAD
   },
   "workbench.colorCustomizations": {
     "activityBar.background": "#52e0ea",
@@ -19,5 +20,7 @@
     "tab.activeBorder": "#52e0ea",
     "iLoveWorkSpaceColors": true,
     "iLoveWorkSpaceRandom": false
+=======
+>>>>>>> origin/develop
   }
 }

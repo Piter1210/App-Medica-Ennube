@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: Mock CI/CD Pipeline
+=======
+name: Mock CI/CD Pipeline - Windows
+>>>>>>> origin/develop
 
 on:
   push:
@@ -7,19 +11,32 @@ on:
 
 jobs:
   build:
+<<<<<<< HEAD
     runs-on: ubuntu-latest
+=======
+    runs-on: windows-latest
+>>>>>>> origin/develop
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Mock Build
         run: |
+<<<<<<< HEAD
           echo " Building the project (mock)..."
           sleep 2
           echo "Build completed "
 
   test:
     runs-on: ubuntu-latest
+=======
+          echo "Building the project (mock)..."
+          Start-Sleep -Seconds 2
+          echo "Build completed"
+
+  test:
+    runs-on: windows-latest
+>>>>>>> origin/develop
     needs: build
     steps:
       - name: Checkout code
@@ -27,12 +44,21 @@ jobs:
 
       - name: Mock Test
         run: |
+<<<<<<< HEAD
           echo " Running tests (mock)..."
           sleep 2
           echo "All tests passed "
 
   deploy-staging:
     runs-on: ubuntu-latest
+=======
+          echo "Running tests (mock)..."
+          Start-Sleep -Seconds 2
+          echo "All tests passed"
+
+  deploy-staging:
+    runs-on: windows-latest
+>>>>>>> origin/develop
     needs: test
     steps:
       - name: Checkout code
@@ -40,6 +66,12 @@ jobs:
 
       - name: Mock Deploy
         run: |
+<<<<<<< HEAD
           echo " Deploying to staging environment (mock)..."
           sleep 2
           echo "Deployment completed "
+=======
+          echo "Deploying to staging environment (mock)..."
+          Start-Sleep -Seconds 2
+          echo "Deployment completed"
+>>>>>>> origin/develop
