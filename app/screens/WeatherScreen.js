@@ -1,15 +1,9 @@
 // screens/WeatherScreen.js
-<<<<<<< HEAD
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
 import { getWeatherForCity } from '../services/weatherService';
-=======
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native';
-import { getWeather } from '../services/weatherService';
->>>>>>> origin/develop
 
 export default function WeatherScreen() {
   const [loading, setLoading] = useState(true);
@@ -19,11 +13,7 @@ export default function WeatherScreen() {
   useEffect(() => {
     (async () => {
       try {
-<<<<<<< HEAD
         const w = await getWeatherForCity('Tehuacan');
-=======
-        const w = await getWeather('Tehuacan');
->>>>>>> origin/develop
         setWeather(w);
       } catch (e) {
         setErr(e.message);
@@ -33,7 +23,6 @@ export default function WeatherScreen() {
     })();
   }, []);
 
-<<<<<<< HEAD
   if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" color="#fff" />;
 
   if (err) return (
@@ -60,28 +49,10 @@ export default function WeatherScreen() {
         <Button title="Actualizar" onPress={() => { setLoading(true); setErr(null); }} />
       </View>
     </LinearGradient>
-=======
-  if (loading) return <ActivityIndicator style={{flex:1}} />;
-  if (err) return (
-    <View style={styles.container}>
-      <Text>Error: {err}</Text>
-      <View style={{height:12}} />
-      <Button title="Reintentar" onPress={() => { setLoading(true); setErr(null); /* re-run effect via key change o similar */ }} />
-    </View>
-  );
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{weather.ciudad}</Text>
-      <Text style={styles.temp}>{weather.temperatura} °C</Text>
-      <Text style={styles.desc}>{weather.descripcion}</Text>
-    </View>
->>>>>>> origin/develop
   );
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -111,10 +82,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
   },
-=======
-  container:{flex:1,justifyContent:'center',alignItems:'center',padding:20},
-  title:{fontSize:22,fontWeight:'700'},
-  temp:{fontSize:20, marginTop:8},
-  desc:{marginTop:6}
->>>>>>> origin/develop
 });
