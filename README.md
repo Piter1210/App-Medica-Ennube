@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # App Médica en la Nube 
 
 ## Descripción de la aplicación
@@ -42,8 +42,8 @@ Usamos **GitFlow** para organizar nuestras ramas y versiones:
 4. Crear release/* desde develop para preparar producción.
 5. Merge de release/* a main y creación de **tag** de versión.
 6. Si hay errores críticos en main, crear hotfix/*, merge a main y develop, y crear **tag** de hotfix.
-=======
-# Welcome to your Expo app 👋
+
+# Welcome to your Expo app 
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -112,4 +112,30 @@ Join our community of developers creating universal apps.
 - Verás "Usuario autenticado" en home.
 - Navegar a Weather para consumir OpenWeather.
 
->>>>>>> MiAppSegura-main
+## integración de la API OpenWeather
+
+Para obtener el clima, usamos la **API de OpenWeather**. Esta API nos permite consultar:
+
+- Temperatura actual de la ciudad.
+- Estado del clima (soleado, nublado, lluvia, etc.).
+- Iconos representativos del clima.
+- Datos adicionales como humedad, velocidad del viento, entre otros.
+
+### Configuración
+1. Crear un archivo weatherService.ts 
+#javascript
+export const OPENWEATHER_API_KEY = "TU_API_KEY_AQUI"  (No subir a repso)
+
+###Todas las capturas se encuentran en assets\App Funcionando. Estas evidencias muestran el correcto funcionamiento de la app:
+#Login:
+-Archivo: assets\App Funcionando/login.png
+-Muestra la pantalla de inicio de sesión con correo y contraseña.
+-Al iniciar sesión correctamente, aparece un mensaje  indicando “Bienvenido”.
+#Pantalla de clima:
+-Archivo: assets\App Funcionando/Climaapi.png
+-Muestra los datos obtenidos de OpenWeather:
+-Temperatura actual (res.temp °C)
+-Descripción del clima (res.desc)
+-Icono representativo del clima (res.icon)
+
+
